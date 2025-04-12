@@ -28,6 +28,11 @@ Instrukcje dotyczące uruchomienia projektu zostaną dodane w późniejszym etap
 - Zainstalowane biblioteki wymienione w `requirements.txt` (do dodania)
 - Node.js i npm (dla frontendu w React)
 
+## Plan wyglądu aplikacji
+
+Poniżej znajduje się wstępna grafika przedstawiająca planowany wygląd interfejsu użytkownika:
+![SmartSelect_20250412_155407_Samsung Notes](https://github.com/user-attachments/assets/9964d4d5-d745-4f30-aa99-067b51d389db)
+
 ## Status projektu
 
 Projekt w trakcie realizacji
@@ -37,10 +42,7 @@ Projekt w trakcie realizacji
 - Gołojuch Katarzyna  
 - Żmudowska Dominika
 
-## Plan wyglądu aplikacji
 
-Poniżej znajduje się wstępna grafika przedstawiająca planowany wygląd interfejsu użytkownika:
-![SmartSelect_20250412_155407_Samsung Notes](https://github.com/user-attachments/assets/9964d4d5-d745-4f30-aa99-067b51d389db)
 
 
 
