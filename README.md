@@ -3,6 +3,7 @@
 ## Opis projektu
 
 Projekt na studia, z przedmiotu Rozwój Aplikacji Internetowych w Medycynie:
+
 Aplikacja webowa umożliwiająca interaktywną wizualizację wyników segmentacji panoptycznej w stomatologii. Użytkownik może:
 
 - nakładać na siebie warstwy: zdjęcie wejściowe, wynik działania modelu oraz maskę segmentacji,
