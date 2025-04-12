@@ -30,7 +30,7 @@ Instrukcje dotyczące uruchomienia projektu zostaną dodane w późniejszym etap
 
 ## Status projektu
 
-🛠 Projekt w trakcie realizacji
+Projekt w trakcie realizacji
 
 ## Autorzy
 
