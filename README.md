@@ -2,13 +2,14 @@
 
 ## Opis projektu
 
+Projekt na studia, z przedmiotu Rozwój Aplikacji Internetowych w Medycynie:
 Aplikacja webowa umożliwiająca interaktywną wizualizację wyników segmentacji panoptycznej w stomatologii. Użytkownik może:
 
 - nakładać na siebie warstwy: zdjęcie wejściowe, wynik działania modelu oraz maskę segmentacji,
-- wybierać, które elementy mają być widoczne,
+- wybierać, które elementy mają być widoczne, jak zęby czy dziąsła,
 - przeglądać klatki wideo z segmentacją,
-- obliczać metryki jakości segmentacji z jednoczesnym zaznaczeniem lokalizacji, dla której została policzona dana wartość,
-- sterować widocznością każdej z warstw w czasie rzeczywistym.
+- obliczać metryki jakości segmentacji (z jednoczesnym zaznaczeniem lokalizacji, dla której została policzona dana wartość),
+- sterować widocznością każdej z warstw w obszarze obserwacji.
 
 ## Technologie
 
@@ -31,6 +32,7 @@ Instrukcje dotyczące uruchomienia projektu zostaną dodane w późniejszym etap
 ## Plan wyglądu aplikacji
 
 Poniżej znajduje się wstępna grafika przedstawiająca planowany wygląd interfejsu użytkownika:
+
 ![SmartSelect_20250412_155407_Samsung Notes](https://github.com/user-attachments/assets/9964d4d5-d745-4f30-aa99-067b51d389db)
 
 ## Status projektu
@@ -39,8 +41,9 @@ Projekt w trakcie realizacji
 
 ## Autorzy
 
-- Gołojuch Katarzyna  
-- Żmudowska Dominika
+studentki Inżynierii Biomedycznej na Politechnice Gdańskiej
+- Gołojuch Katarzyna 193464
+- Żmudowska Dominika 193153
 
 
 
