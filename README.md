@@ -1,4 +1,5 @@
 # Interaktywna strona internetowa do wizualizacji problemu segmentacji sceny dentystycznej - segmentacja panoptyczna
+<img src="https://github.com/user-attachments/assets/40faa7df-aa5a-46be-ad5f-5de13bca2bc7" alt="pg_logo_kolor" width="200"/>
 
 ## Opis projektu
 
@@ -45,7 +46,7 @@ Projekt w trakcie realizacji
 studentki Inżynierii Biomedycznej na Politechnice Gdańskiej
 - Gołojuch Katarzyna 193464
 - Żmudowska Dominika 193153
-
+pod okiem dr inż. Anny Jezierskiej
 
 
 
