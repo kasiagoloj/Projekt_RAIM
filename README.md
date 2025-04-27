@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# Interaktywna strona internetowa do wizualizacji problemu segmentacji sceny dentystycznej - segmentacja panoptyczna
+<img src="https://github.com/user-attachments/assets/40faa7df-aa5a-46be-ad5f-5de13bca2bc7" alt="pg_logo_kolor" width="200"/>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Opis projektu
 
-## Available Scripts
+Projekt na studia, z przedmiotu Rozwój Aplikacji Internetowych w Medycynie:
 
-In the project directory, you can run:
+Aplikacja webowa umożliwiająca interaktywną wizualizację wyników segmentacji panoptycznej w stomatologii. Użytkownik może:
 
-### `npm start`
+- nakładać na siebie warstwy: zdjęcie wejściowe, wynik działania modelu oraz maskę segmentacji,
+- wybierać, które elementy mają być widoczne, jak zęby czy dziąsła,
+- przeglądać klatki wideo z segmentacją,
+- obliczać metryki jakości segmentacji (z jednoczesnym zaznaczeniem lokalizacji, dla której została policzona dana wartość),
+- sterować widocznością każdej z warstw w obszarze obserwacji.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technologie
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Python (64-bit)
+- Flask (backend)
+- React.js (frontend)
+- PostgreSQL (baza danych)
+- PyTorch (model segmentacyjny)
 
-### `npm test`
+## Uruchomienie
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Instrukcje dotyczące uruchomienia projektu zostaną dodane w późniejszym etapie. Docelowo aplikacja będzie dostępna poprzez link w przeglądarce.
 
-### `npm run build`
+## Wymagania
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Python 3.x (64-bit)
+- Zainstalowane biblioteki wymienione w `requirements.txt` (do dodania)
+- Node.js i npm (dla frontendu w React)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Plan wyglądu aplikacji
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Poniżej znajduje się wstępna grafika przedstawiająca planowany wygląd interfejsu użytkownika:
 
-### `npm run eject`
+![SmartSelect_20250412_155407_Samsung Notes](https://github.com/user-attachments/assets/9964d4d5-d745-4f30-aa99-067b51d389db)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Status projektu
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Projekt w trakcie realizacji
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Autorzy
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+studentki Inżynierii Biomedycznej na Politechnice Gdańskiej
+- Gołojuch Katarzyna 193464
+- Żmudowska Dominika 193153
+pod okiem dr inż. Anny Jezierskiej
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
