@@ -3,7 +3,8 @@ import * as React from 'react';
 import { useState } from 'react';
 
 function App() {
-  const [inputImage, setInputImage] = useState(null);
+  const [frames, setFrames] = useState([]);
+  const [currentFrameIndex, setCurrentFrameIndex] = useState(0)
   const [maskFile, setMaskFile] = useState(null);
   const [modelFile, setModelFile] = useState(null);
 
@@ -15,7 +16,13 @@ function App() {
 
     switch (type) {
       case 'input':
-        setInputImage(file);
+        const files = Array.from(e.target.files || []);
+        const previews = files.map(file => ({
+          file,
+          preview: URL.createObjectURL(file)
+        }));
+        setFrames(previews);
+        setCurrentFrameIndex(0);
         break;
       case 'mask':
         setMaskFile(file);
@@ -35,6 +42,14 @@ function App() {
 
     handleFile({ target: { files: [file] } }, type);
   };
+
+  const goToPrevious = () => {
+    setCurrentFrameIndex((prev) => Math.max(prev - 1, 0));
+  }
+
+  const goToNext = () => {
+    setCurrentFrameIndex((prev) => Math.min(prev + 1, frames.length - 1));
+  }
 
   return (
     <div className="app-wrapper">
@@ -90,14 +105,20 @@ function App() {
             onDrop={(e) => handleDrop(e, 'input')}
             onClick={() => document.getElementById('fileInput').click()}
           >
-            {inputImage ? (
-              <p>Plik: <strong>{inputImage.name}</strong></p>
+            {frames.length > 0 ? (
+              <img
+                src={frames[currentFrameIndex]?.preview}
+                alt="Podgląd"
+                title={frames[currentFrameIndex]?.file.name}
+                style={{maxWidth: '100%', maxHeight: '150px', marginTop: '0.5rem'}}
+                />
             ) : (
               <p>Zdjęcie wejściowe<br />(kliknij lub upuść plik)</p>
             )}
             <input
               id="fileInput"
               type="file"
+              multiple
               style={{ display: 'none' }}
               onChange={(e) => handleFile(e, 'input')}
             />
@@ -143,13 +164,57 @@ function App() {
         </div>
 
         <main className="observation-area">
-          Obszar obserwacji
+          {frames.length > 0 ? (
+            <img
+            src={frames[currentFrameIndex]?.preview}
+            alt={`Klatka ${currentFrameIndex + 1}`}
+            style={{maxWidth: '100%', maxHeight: '100%', objectFit: 'contain'}}
+            />
+          ) : (
+            <p>Brak załadowanego zdjęcia</p>
+          )}
         </main>
 
         <div className="frames">
-          <button>Poprzednie klatki</button>
-          <button className="active">Aktualna klatka</button>
-          <button>Następne klatki</button>
+          <button 
+            onClick={goToPrevious} 
+            disables={currentFrameIndex === 0}
+            title="Poprzednia klatka">
+              {frames[currentFrameIndex - 1] ? (
+                <img
+                src={frames[currentFrameIndex - 1].preview}
+                alt="Poprzednia"
+                style={{ maxWidth: '100px', maxHeight: '80px', objectFit: 'cover' }}
+                />
+              ) : (
+                'Poprzednia'
+              )}
+            </button>
+          <button className="active" title="Aktualna klatka">
+            {frames[currentFrameIndex] ? (
+              <img
+              src={frames[currentFrameIndex].preview}
+              alt="Aktualna"
+              style={{ maxWidth: '100px', maxHeight: '80px', objectFit: 'cover'}}
+              />
+            ) : (
+              'Aktualna'
+            )}
+          </button>
+          <button 
+          onClick={goToNext} 
+          disabled={currentFrameIndex >= frames.length-1}
+          title="Następna">
+            {frames[currentFrameIndex + 1] ? (
+            <img
+            src={frames[currentFrameIndex + 1].preview}
+            alt="Następna"
+            style={{ maxWidth: '100px', maxHeight: '80px', objectFit: 'cover'}}
+            />
+            ) : (
+              'Następna'
+            )}
+          </button>
         </div>
 
         <section className="metrics">
