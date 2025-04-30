@@ -8,6 +8,9 @@ function App() {
   const [maskFile, setMaskFile] = useState(null);
   const [modelFile, setModelFile] = useState(null);
   const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [observationScale, setObservationScale] = useState(1.0);
+  const baseObservationSize = { width: 1100, height: 700 };
+
 
   const handleFile = (e, type) => {
     const file = e.target.files[0];
@@ -73,6 +76,16 @@ function App() {
 
             <h3>Sterowanie widocznością elementów</h3>
             <div className="opacity-controls">
+              <label>Rozmiar obszaru obserwacji</label>
+              <input
+              type="range"
+              min="0.5"
+              max="1"
+              step="0.01"
+              value={observationScale}
+              onChange={(e) => setObservationScale(parseFloat(e.target.value))}
+              />
+              <span>{Math.round(observationScale * 100)}%</span>
               <label>Widoczność maski</label>
               <input type="range" />
               <label>Widoczność modelu</label>
@@ -164,16 +177,21 @@ function App() {
           </div>
         </div>
 
-        <main className="observation-area">
+        <main className="observation-area"
+          style={{
+            width: `${baseObservationSize.width * observationScale}px`,
+            height: `${baseObservationSize.height * observationScale}px`
+            }}
+            >
           {frames.length > 0 ? (
             <img
               src={frames[currentFrameIndex]?.preview}
               alt={`Klatka ${currentFrameIndex + 1}`}
-              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-            />
-          ) : (
-            <p>Brak załadowanego zdjęcia</p>
-          )}
+              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}     
+              />
+            ) : (
+              <p>Brak załadowanego zdjęcia</p>
+            )}
         </main>
 
         <div className="frames">

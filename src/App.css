@@ -40,7 +40,7 @@ body {
 /* Sidebar */
 .sidebar {
   position: fixed;
-  top: 175px;
+  top: 200px;
   left: 0;
   bottom: 0;
   width: 230px;
@@ -82,12 +82,14 @@ body {
   grid-area: header;
   text-align: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  height: 150px;
 }
 
 .header h1 {
   font-size: 4rem;
   margin: 0;
   color: #5d8dd6;
+  margin-top: 20px;
 }
 
 .header h2 {
@@ -185,13 +187,22 @@ body {
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  margin: 0 auto;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  transition: width 0.2s ease, height 0.2s ease;
+}
+
+.observation-scale {
+  transform-origin: top center;
+  transition: transform 0.2s ease;
 }
 
 .frames {
   grid-area: frames;
-  display: flex;
-  justify-content: space-around;
   padding: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .frames button {
