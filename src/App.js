@@ -4,10 +4,9 @@ import { useState } from 'react';
 
 function App() {
   const [frames, setFrames] = useState([]);
-  const [currentFrameIndex, setCurrentFrameIndex] = useState(0)
+  const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
   const [maskFile, setMaskFile] = useState(null);
   const [modelFile, setModelFile] = useState(null);
-
   const [sidebarVisible, setSidebarVisible] = useState(true);
 
   const handleFile = (e, type) => {
@@ -45,58 +44,60 @@ function App() {
 
   const goToPrevious = () => {
     setCurrentFrameIndex((prev) => Math.max(prev - 1, 0));
-  }
+  };
 
   const goToNext = () => {
     setCurrentFrameIndex((prev) => Math.min(prev + 1, frames.length - 1));
-  }
+  };
 
   return (
     <div className="app-wrapper">
-      <div className={`app-layout ${sidebarVisible ? 'with-sidebar' : 'no-sidebar'}`}>
         <header className="header">
           <h1>Segmentacja Panoptyczna</h1>
           <h2>Sceny dentystycznej</h2>
         </header>
-
-        {sidebarVisible ? (
-          <aside className="sidebar">
-            <button
-              className="sidebar-toggle"
-              onClick={() => setSidebarVisible(false)}
-              title="Ukryj panel"
-            >
-              ◀
-            </button>
-            <div className="visibility-panel">
-              <label className="legend-label">Legenda kolorów</label>
-              <div className="legend-box">
-                {/* Tu będzie legenda */}
-              </div>
-
-              <h3>Sterowanie widocznością elementów</h3>
-              <div className="opacity-controls">
-                <label>Widoczność maski</label>
-                <input type="range" />
-                <label>Widoczność modelu</label>
-                <input type="range" />
-              </div>
+      {sidebarVisible && (
+        <aside className="sidebar">
+          <button
+            className="sidebar-toggle"
+            onClick={() => setSidebarVisible(false)}
+            title="Ukryj panel"
+          >
+            ◀
+          </button>
+          <div className="visibility-panel">
+            <label className="legend-label">Legenda kolorów</label>
+            <div className="legend-box">
+              {/* Tu będzie legenda */}
             </div>
 
-            <div className="navigation">
-              <label>Image / Video Navigation</label>
+            <h3>Sterowanie widocznością elementów</h3>
+            <div className="opacity-controls">
+              <label>Widoczność maski</label>
+              <input type="range" />
+              <label>Widoczność modelu</label>
               <input type="range" />
             </div>
-          </aside>
-        ) : (
-          <button
-            className="sidebar-toggle show-toggle"
-            onClick={() => setSidebarVisible(true)}
-            title="Pokaż panel"
-          >
-            ▶
-          </button>
-        )}
+          </div>
+
+          <div className="navigation">
+            <label>Image / Video Navigation</label>
+            <input type="range" />
+          </div>
+        </aside>
+      )}
+
+      {!sidebarVisible && (
+        <button
+          className="sidebar-toggle show-toggle"
+          onClick={() => setSidebarVisible(true)}
+          title="Pokaż panel"
+        >
+          ▶
+        </button>
+      )}
+
+      <div className={`app-layout ${sidebarVisible ? 'with-sidebar' : 'no-sidebar'}`}>
 
         <div className="top-panels">
           <div
@@ -110,8 +111,8 @@ function App() {
                 src={frames[currentFrameIndex]?.preview}
                 alt="Podgląd"
                 title={frames[currentFrameIndex]?.file.name}
-                style={{maxWidth: '100%', maxHeight: '150px', marginTop: '0.5rem'}}
-                />
+                style={{ maxWidth: '100%', maxHeight: '150px', marginTop: '0.5rem' }}
+              />
             ) : (
               <p>Zdjęcie wejściowe<br />(kliknij lub upuść plik)</p>
             )}
@@ -166,9 +167,9 @@ function App() {
         <main className="observation-area">
           {frames.length > 0 ? (
             <img
-            src={frames[currentFrameIndex]?.preview}
-            alt={`Klatka ${currentFrameIndex + 1}`}
-            style={{maxWidth: '100%', maxHeight: '100%', objectFit: 'contain'}}
+              src={frames[currentFrameIndex]?.preview}
+              alt={`Klatka ${currentFrameIndex + 1}`}
+              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
             />
           ) : (
             <p>Brak załadowanego zdjęcia</p>
@@ -176,41 +177,43 @@ function App() {
         </main>
 
         <div className="frames">
-          <button 
-            onClick={goToPrevious} 
-            disables={currentFrameIndex === 0}
-            title="Poprzednia klatka">
-              {frames[currentFrameIndex - 1] ? (
-                <img
+          <button
+            onClick={goToPrevious}
+            disabled={currentFrameIndex === 0}
+            title="Poprzednia klatka"
+          >
+            {frames[currentFrameIndex - 1] ? (
+              <img
                 src={frames[currentFrameIndex - 1].preview}
                 alt="Poprzednia"
                 style={{ maxWidth: '100px', maxHeight: '80px', objectFit: 'cover' }}
-                />
-              ) : (
-                'Poprzednia'
-              )}
-            </button>
+              />
+            ) : (
+              'Poprzednia'
+            )}
+          </button>
           <button className="active" title="Aktualna klatka">
             {frames[currentFrameIndex] ? (
               <img
-              src={frames[currentFrameIndex].preview}
-              alt="Aktualna"
-              style={{ maxWidth: '100px', maxHeight: '80px', objectFit: 'cover'}}
+                src={frames[currentFrameIndex].preview}
+                alt="Aktualna"
+                style={{ maxWidth: '100px', maxHeight: '80px', objectFit: 'cover' }}
               />
             ) : (
               'Aktualna'
             )}
           </button>
-          <button 
-          onClick={goToNext} 
-          disabled={currentFrameIndex >= frames.length-1}
-          title="Następna">
+          <button
+            onClick={goToNext}
+            disabled={currentFrameIndex >= frames.length - 1}
+            title="Następna"
+          >
             {frames[currentFrameIndex + 1] ? (
-            <img
-            src={frames[currentFrameIndex + 1].preview}
-            alt="Następna"
-            style={{ maxWidth: '100px', maxHeight: '80px', objectFit: 'cover'}}
-            />
+              <img
+                src={frames[currentFrameIndex + 1].preview}
+                alt="Następna"
+                style={{ maxWidth: '100px', maxHeight: '80px', objectFit: 'cover' }}
+              />
             ) : (
               'Następna'
             )}

@@ -5,24 +5,17 @@ body {
   background: linear-gradient(180deg, #c1defd, #7bb9fb);
   font-family: sans-serif;
 }
-.app-layout {
-  display: grid;
-  grid-template-areas:
-    "header header"
-    "sidebar top"
-    "sidebar main"
-    "sidebar frames"
-    "sidebar metrics";
-  grid-template-columns: 250px 1fr;
-  grid-template-rows: auto auto 1fr auto auto;
-  gap: 1rem;
-  font-family: sans-serif;
-  background: transparent;
-  transition: all 0.3s ease;
-  overflow-y: auto;
+
+.app-wrapper {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
 }
 
-.app-layout.no-sidebar {
+.app-layout {
+  display: grid;
   grid-template-areas:
     "header header"
     "top top"
@@ -30,13 +23,65 @@ body {
     "frames frames"
     "metrics metrics";
   grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr auto auto;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  padding: 1rem;
+}
+
+.app-layout.with-sidebar {
+  margin-left: 250px;
+}
+
+.app-layout.no-sidebar {
+  margin-left: 0;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 175px;
+  left: 0;
+  bottom: 0;
+  width: 230px;
+  background: linear-gradient(180deg, #c1defd, #7bb9fb);
+  padding: 1rem;
+  border-right: 1px solid #ccc;
+  z-index: 1000;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-toggle {
+  position: fixed;
+  top: 50%;
+  left: 250px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 40px;
+  background-color: #004080;
+  color: white;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  background-color: #0060c0;
+}
+
+.show-toggle {
+  left: 0;
+  right: auto;
 }
 
 /* Nagłówek */
 .header {
   grid-area: header;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .header h1 {
@@ -50,51 +95,6 @@ body {
   font-weight: normal;
   color: #0e1a2c;
   margin-top: 0.25rem;
-}
-
-/* Sidebar */
-.sidebar {
-  grid-area: sidebar;
-  width: 250px;
-  height: 100%;
-  background: linear-gradient(180deg, #c1defd, #7bb9fb);
-  padding: 1rem;
-  border-right: 1px solid #ccc;
-  transition: transform 0.3s ease;
-  transform: translateX(0);
-  z-index: 1;
-  overflow-y: auto;
-  position: relative;
-}
-
-/* Toggle buttons */
-.sidebar-toggle {
-  position: absolute;
-  top: 50%;
-  right: -20px;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 40px;
-  background-color: #004080;
-  color: white;
-  border: none;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  z-index: 1000;
-  transition: background-color 0.3s ease;
-}
-
-.sidebar.hidden {
-  transform: translateX(-100%);
-}
-
-.sidebar-toggle:hover {
-  background-color: #0060c0;
-}
-
-.show-toggle {
-  left: 0;
-  right: auto;
 }
 
 /* Panel z legendą */
@@ -217,13 +217,4 @@ body {
   height: 100px;
   background: #eef;
   margin-top: 0.5rem;
-}
-
-.app-wrapper {
-  max-width: 1300px;
-  margin: 1rem auto;
-  border-radius: 2px;
-  overflow: hidden;
-  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
-  background-color: transparent;
 }
