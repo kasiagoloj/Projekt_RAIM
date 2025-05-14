@@ -10,6 +10,7 @@ function App() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [observationScale, setObservationScale] = useState(1.0);
   const baseObservationSize = { width: 1100, height: 700 };
+  const [maskData, setMaskData] = useState(null);
 
 
   const handleFile = (e, type) => {
@@ -28,6 +29,16 @@ function App() {
         break;
       case 'mask':
         setMaskFile(file);
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const parsed = JSON.parse(event.target.result);
+                setMaskData(parsed);
+            } catch (err) {
+                console.error('Nie można sparsować pliku JSON z maskami:', err);
+            }
+        };
+        reader.readAsText(file);
         break;
       case 'model':
         setModelFile(file);
@@ -187,7 +198,7 @@ function App() {
             <img
               src={frames[currentFrameIndex]?.preview}
               alt={`Klatka ${currentFrameIndex + 1}`}
-              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}     
+              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
               />
             ) : (
               <p>Brak załadowanego zdjęcia</p>
