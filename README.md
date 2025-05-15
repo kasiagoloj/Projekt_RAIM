@@ -4,7 +4,7 @@
 <img src="https://github.com/user-attachments/assets/3247306e-f4dd-4d19-94ca-75cff37c2e10" alt="kibm_logo" width="140"/>
 
 ## Autorzy
-Projekt realizowany przez studentki Inżynierii Biomedycznej, Informatyki w Medycynie na Politechnice Gdańskiej w ramach przedmiotu: Rozwój aplikacji internetowych w medycynie:
+Projekt realizowany przez studentki Inżynierii Biomedycznej, Informatyki w Medycynie na Politechnice Gdańskiej w ramach przedmiotu: Rozwój aplikacji internetowych w medycynie, na 6 semestrze studiów inżynierskich:
 - Katarzyna Gołojuch (193464)  
 - Dominika Żmudowska (193153)
 
