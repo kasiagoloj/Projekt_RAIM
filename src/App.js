@@ -1,44 +1,74 @@
 import './App.css';
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 function App() {
   const [frames, setFrames] = useState([]);
   const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
   const [maskFile, setMaskFile] = useState(null);
   const [modelFile, setModelFile] = useState(null);
+  const [maskData, setMaskData] = useState(null);
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [observationScale, setObservationScale] = useState(1.0);
   const baseObservationSize = { width: 1100, height: 700 };
-  const [maskData, setMaskData] = useState(null);
 
+  useEffect(() => {
+    fetch('http://127.0.0.1:5000/masks')
+      .then(res => res.json())
+      .then(data => {
+        const imgs = data.images.map(img => ({
+          id: img.id,
+          file: { name: img.file_name },
+          mask: null,
+        }));
+        setFrames(imgs);
+        setCurrentFrameIndex(0);
+      })
+      .catch(err => console.error("Błąd przy pobieraniu obrazów:", err));
+  },);
+
+  const handleMaskFileLoad = (file) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const parsed = JSON.parse(event.target.result);
+        setMaskData(parsed);
+
+        setFrames(prevFrames =>
+          prevFrames.map(frame => {
+            const fileName = frame.file.name;
+            const maskBase64 = parsed[fileName] || null;
+            return {
+              ...frame,
+              mask: maskBase64 ? `data:image/png;base64,${maskBase64}` : null,
+            };
+          })
+        );
+      } catch (err) {
+        console.error('Nie można sparsować pliku JSON z maskami:', err);
+      }
+    };
+    reader.readAsText(file);
+  };
 
   const handleFile = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
     switch (type) {
-      case 'input':
+      case 'input': {
         const files = Array.from(e.target.files || []);
         const previews = files.map(file => ({
           file,
-          preview: URL.createObjectURL(file)
+          preview: URL.createObjectURL(file),
+          mask: null,
         }));
         setFrames(previews);
         setCurrentFrameIndex(0);
         break;
+      }
       case 'mask':
         setMaskFile(file);
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            try {
-                const parsed = JSON.parse(event.target.result);
-                setMaskData(parsed);
-            } catch (err) {
-                console.error('Nie można sparsować pliku JSON z maskami:', err);
-            }
-        };
-        reader.readAsText(file);
+        handleMaskFileLoad(file);
         break;
       case 'model':
         setModelFile(file);
@@ -52,24 +82,23 @@ function App() {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     if (!file) return;
-
     handleFile({ target: { files: [file] } }, type);
   };
 
   const goToPrevious = () => {
-    setCurrentFrameIndex((prev) => Math.max(prev - 1, 0));
+    setCurrentFrameIndex(prev => Math.max(prev - 1, 0));
   };
 
   const goToNext = () => {
-    setCurrentFrameIndex((prev) => Math.min(prev + 1, frames.length - 1));
+    setCurrentFrameIndex(prev => Math.min(prev + 1, frames.length - 1));
   };
 
   return (
     <div className="app-wrapper">
-        <header className="header">
-          <h1>Segmentacja Panoptyczna</h1>
-          <h2>Sceny dentystycznej</h2>
-        </header>
+      <header className="header">
+        <h1>Segmentacja Panoptyczna</h1>
+        <h2>Sceny dentystycznej</h2>
+      </header>
       {sidebarVisible && (
         <aside className="sidebar">
           <button
@@ -89,12 +118,12 @@ function App() {
             <div className="opacity-controls">
               <label>Rozmiar obszaru obserwacji</label>
               <input
-              type="range"
-              min="0.5"
-              max="1"
-              step="0.01"
-              value={observationScale}
-              onChange={(e) => setObservationScale(parseFloat(e.target.value))}
+                type="range"
+                min="0.5"
+                max="1"
+                step="0.01"
+                value={observationScale}
+                onChange={(e) => setObservationScale(parseFloat(e.target.value))}
               />
               <span>{Math.round(observationScale * 100)}%</span>
               <label>Widoczność maski</label>
@@ -191,18 +220,43 @@ function App() {
         <main className="observation-area"
           style={{
             width: `${baseObservationSize.width * observationScale}px`,
-            height: `${baseObservationSize.height * observationScale}px`
-            }}
-            >
+            height: `${baseObservationSize.height * observationScale}px`,
+            position: 'relative',
+          }}
+        >
           {frames.length > 0 ? (
-            <img
-              src={frames[currentFrameIndex]?.preview}
-              alt={`Klatka ${currentFrameIndex + 1}`}
-              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+            <>
+            console.log("maskData keys:", Object.keys(maskData));
+        console.log("Current frame file name:", frames[currentFrameIndex]?.file.name);
+              <img
+                src={frames[currentFrameIndex]?.preview}
+                alt={`Klatka ${currentFrameIndex + 1}`}
+                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', position: 'relative', zIndex: 1 }}
               />
-            ) : (
-              <p>Brak załadowanego zdjęcia</p>
-            )}
+              {frames[currentFrameIndex]?.mask ? (
+                <img
+                  src={frames[currentFrameIndex].mask}
+                  alt="Maska"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    opacity: 0.6,
+                    pointerEvents: 'none',
+                    zIndex: 2,
+                  }}
+                />
+              ) : (
+                <p style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+                  Maska dla tego pliku: NIE
+                </p>
+              )}
+            </>
+          ) : (
+            <p>Brak załadowanego zdjęcia</p>
+          )}
         </main>
 
         <div className="frames">
