@@ -1,6 +1,6 @@
 # Interaktywna strona internetowa do wizualizacji problemu segmentacji sceny dentystycznej - segmentacja panoptyczna
 <img src="https://github.com/user-attachments/assets/40faa7df-aa5a-46be-ad5f-5de13bca2bc7" alt="pg_logo_kolor" width="200"/>
-![kibm](https://github.com/user-attachments/assets/3247306e-f4dd-4d19-94ca-75cff37c2e10)
+<img src="https://github.com/user-attachments/assets/3247306e-f4dd-4d19-94ca-75cff37c2e10" alt="kibm_logo" width="140"/>
 
 ## Autorzy
 Projekt realizowany przez studentki Inżynierii Biomedycznej, Informatyki w Medycynie na Politechnice Gdańskiej w ramach przedmiotu: Rozwój aplikacji internetowych w medycynie:
