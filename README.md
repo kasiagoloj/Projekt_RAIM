@@ -19,42 +19,42 @@ Webowa aplikacja umożliwiająca wizualizację wyników segmentacji panoptycznej
 Aplikacja webowa umożliwiająca interaktywną wizualizację wyników segmentacji panoptycznej w stomatologii. Użytkownik może:
 
 - nakładać na siebie warstwy: zdjęcie wejściowe, wynik działania modelu oraz maskę segmentacji,
-- wybierać, które elementy mają być widoczne, jak zęby czy dziąsła,
 - przeglądać klatki wideo z segmentacją,
-- obliczać metryki jakości segmentacji (z jednoczesnym zaznaczeniem lokalizacji, dla której została policzona dana wartość),
-- sterować widocznością każdej z warstw w obszarze obserwacji.
+- obliczać metryki jakości segmentacji
+- sterować widocznością warstw w obszarze obserwacji.
+
+Niestety ze względu na prawa autorskie, nie mamy możliwości udostępnienia niezbędnych plkiów do działania aplikacji. Aby skutecznie wykorzystywać możliwości oferowane przez aplikację webową, należy zaopatrzyć się we własne dane. 
 
 ## Cele i założenia projektu
 
 - Ułatwienie wizualizacji wyników modeli segmentacyjnych w stomatologii  
-- Stworzenie intuicyjnego interfejsu do pracy z obrazami i maskami  
-- Możliwość analizy dokładności segmentacji z uwzględnieniem lokalizacji  
+- Stworzenie intuicyjnego interfejsu do pracy z obrazami i maskami   
 - Obsługa obrazów statycznych i sekwencji wideo  
 - Praca w czasie zbliżonym do rzeczywistego
 
 ## Funkcjonalności
 
 - Nakładanie warstw: zdjęcie wejściowe, wynik działania modelu, maska segmentacji  
-- Sterowanie widocznością poszczególnych elementów: np. zębów, dziąseł  
+- Sterowanie widocznością poszczególnych warstw obszaru obserwacji 
 - Przeglądanie wideo z segmentacją, przewijanie klatek  
-- Obliczanie i prezentacja metryk jakości segmentacji z lokalizacją  
 - Interaktywne sterowanie widocznością każdej z warstw
 
 ## Technologie
 
 - **Python** (64-bit)  
 - **Flask** – backend  
-- **React.js** – frontend  
-- **PostgreSQL** – baza danych  
+- **React.js** – frontend   
 - **PyTorch** – model do segmentacji
 
 ### Wymagania
 - Python 3.x (64-bit)
-- Zainstalowane biblioteki wymienione w `requirements.txt` (do dodania)
+- Zainstalowane biblioteki wymienione w `requirements.txt` 
 - Node.js i npm (dla frontendu w React)
 
 ## Uruchomienie
-Instrukcje dotyczące uruchomienia projektu będą jeszv=cze aktualizowane w późniejszym etapie. Docelowo aplikacja będzie dostępna poprzez link w przeglądarce.
+Strona jest hostowana pod linikiem: https://projekt-raim.onrender.com/ 
+
+Wystarczy w niego kliknąć i strona się uruchomi. 
 
 ### Backend (Flask)
 1. Zainstaluj Pythona 3.x (64-bit)  
@@ -63,7 +63,7 @@ Instrukcje dotyczące uruchomienia projektu będą jeszv=cze aktualizowane w pó
    pip install -r requirements.txt
 3. Uruchom serwer backendu:
    ```bash
-   python visualize_masks.py
+   python masks_visualization_ready.py
 
 ### Frontend (React.js)
 1. Zainstaluj Node.js i npm
@@ -74,11 +74,32 @@ Instrukcje dotyczące uruchomienia projektu będą jeszv=cze aktualizowane w pó
    ```bash
    npm start
 
+## Działanie aplikacji
+W obszarze opisanym jako zdjęcie wejściowe należy dodać pliki w formatach .png lub .jpg przedstawiające klatki z wideo z kamery dentystycznej. 
+Obszar opisany jako maska przyjmuje pliki w formatach .png lub .jpg wygenerowene przez plik masks_visualization_ready.py na podstawie maski w formacie .json COCO. 
+Przestrzeń na model przyjmuje pliki w formatach .png lub .jpg wygenerowene przez model jako jego predykcje obszarów zgodnie z zadanymi klasami. 
+
+Niestety ze względu na prawa autorskie, nie mamy możliwości udostępnienia plików do wgrania na stronę, niezbędnych do działania aplikacji. 
+Aby skutecznie wykorzystywać możliwości oferowane przez aplikację webową, należy zaopatrzyć się we własne dane. 
+
+W panelu znajdującym się po lewej stronie można zaobserwować legendę kolorów oraz mechanizm sterowania widocznością maski i modelu w obszarze obserwacji. 
+Z założenia, model jest warstwą wierzchnią, stąd przy ustawieniu 100% widoczności na obu warstwach (masce i modelu), będzie widoczna grafika predykcji modelu.
+
 ## Grafiki
-### projekt interfejsu
+### Projekt interfejsu
 Poniżej znajduje się wstępna grafika przedstawiająca planowany wygląd interfejsu użytkownika:
 
 ![SmartSelect_20250412_155407_Samsung Notes](https://github.com/user-attachments/assets/9964d4d5-d745-4f30-aa99-067b51d389db)
+
+### Wykonanie
+Poniżej znajduje się grafika przedstawiająca wygląd interfejsu użytkownika zaraz po uruchomieniu strony:
+
+![image](https://github.com/user-attachments/assets/a0e6cce3-3f46-4797-96ae-ce6a84712c23)
+
+
+Poniżej znajduje się grafika przedstawiająca wygląd interfejsu użytkownika po dodaniu plików w miejsca przeznaczone:
+
+![image](https://github.com/user-attachments/assets/e933cd91-09a4-45f0-b34a-74c0b7f1c3c3)
 
 ## Status projektu
 
