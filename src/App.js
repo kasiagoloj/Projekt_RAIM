@@ -228,11 +228,6 @@ function App() {
               <input type="range" />
             </div>
           </div>
-
-          <div className="navigation">
-            <label>Image / Video Navigation</label>
-            <input type="range" />
-          </div>
         </aside>
       )}
 
