@@ -19,42 +19,39 @@ Webowa aplikacja umożliwiająca wizualizację wyników segmentacji panoptycznej
 Aplikacja webowa umożliwiająca interaktywną wizualizację wyników segmentacji panoptycznej w stomatologii. Użytkownik może:
 
 - nakładać na siebie warstwy: zdjęcie wejściowe, wynik działania modelu oraz maskę segmentacji,
-- wybierać, które elementy mają być widoczne, jak zęby czy dziąsła,
 - przeglądać klatki wideo z segmentacją,
-- obliczać metryki jakości segmentacji (z jednoczesnym zaznaczeniem lokalizacji, dla której została policzona dana wartość),
-- sterować widocznością każdej z warstw w obszarze obserwacji.
+- obliczać metryki jakości segmentacji
+- sterować widocznością warstw w obszarze obserwacji.
 
 ## Cele i założenia projektu
 
 - Ułatwienie wizualizacji wyników modeli segmentacyjnych w stomatologii  
-- Stworzenie intuicyjnego interfejsu do pracy z obrazami i maskami  
-- Możliwość analizy dokładności segmentacji z uwzględnieniem lokalizacji  
+- Stworzenie intuicyjnego interfejsu do pracy z obrazami i maskami   
 - Obsługa obrazów statycznych i sekwencji wideo  
 - Praca w czasie zbliżonym do rzeczywistego
 
 ## Funkcjonalności
 
 - Nakładanie warstw: zdjęcie wejściowe, wynik działania modelu, maska segmentacji  
-- Sterowanie widocznością poszczególnych elementów: np. zębów, dziąseł  
+- Sterowanie widocznością poszczególnych warstw obszaru obserwacji 
 - Przeglądanie wideo z segmentacją, przewijanie klatek  
-- Obliczanie i prezentacja metryk jakości segmentacji z lokalizacją  
 - Interaktywne sterowanie widocznością każdej z warstw
 
 ## Technologie
 
 - **Python** (64-bit)  
 - **Flask** – backend  
-- **React.js** – frontend  
-- **PostgreSQL** – baza danych  
+- **React.js** – frontend   
 - **PyTorch** – model do segmentacji
 
 ### Wymagania
 - Python 3.x (64-bit)
-- Zainstalowane biblioteki wymienione w `requirements.txt` (do dodania)
+- Zainstalowane biblioteki wymienione w `requirements.txt` 
 - Node.js i npm (dla frontendu w React)
 
 ## Uruchomienie
-Instrukcje dotyczące uruchomienia projektu będą jeszv=cze aktualizowane w późniejszym etapie. Docelowo aplikacja będzie dostępna poprzez link w przeglądarce.
+Strona jest hostowana pod linikiem: https://projekt-raim.onrender.com/ 
+Wystarczy w niego kliknąć i strona się uruchomi. 
 
 ### Backend (Flask)
 1. Zainstaluj Pythona 3.x (64-bit)  
