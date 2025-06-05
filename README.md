@@ -23,6 +23,8 @@ Aplikacja webowa umożliwiająca interaktywną wizualizację wyników segmentacj
 - obliczać metryki jakości segmentacji
 - sterować widocznością warstw w obszarze obserwacji.
 
+Niestety ze względu na prawa autorskie, nie mamy możliwości udostępnienia niezbędnych plkiów do działania aplikacji. Aby skutecznie wykorzystywać możliwości oferowane przez aplikację webową, należy zaopatrzyć się we własne dane. 
+
 ## Cele i założenia projektu
 
 - Ułatwienie wizualizacji wyników modeli segmentacyjnych w stomatologii  
@@ -51,6 +53,7 @@ Aplikacja webowa umożliwiająca interaktywną wizualizację wyników segmentacj
 
 ## Uruchomienie
 Strona jest hostowana pod linikiem: https://projekt-raim.onrender.com/ 
+
 Wystarczy w niego kliknąć i strona się uruchomi. 
 
 ### Backend (Flask)
@@ -60,7 +63,7 @@ Wystarczy w niego kliknąć i strona się uruchomi.
    pip install -r requirements.txt
 3. Uruchom serwer backendu:
    ```bash
-   python visualize_masks.py
+   python masks_visualization_ready.py
 
 ### Frontend (React.js)
 1. Zainstaluj Node.js i npm
@@ -71,11 +74,32 @@ Wystarczy w niego kliknąć i strona się uruchomi.
    ```bash
    npm start
 
+## Działanie aplikacji
+W obszarze opisanym jako zdjęcie wejściowe należy dodać pliki w formatach .png lub .jpg przedstawiające klatki z wideo z kamery dentystycznej. 
+Obszar opisany jako maska przyjmuje pliki w formatach .png lub .jpg wygenerowene przez plik masks_visualization_ready.py na podstawie maski w formacie .json COCO. 
+Przestrzeń na model przyjmuje pliki w formatach .png lub .jpg wygenerowene przez model jako jego predykcje obszarów zgodnie z zadanymi klasami. 
+
+Niestety ze względu na prawa autorskie, nie mamy możliwości udostępnienia plików do wgrania na stronę, niezbędnych do działania aplikacji. 
+Aby skutecznie wykorzystywać możliwości oferowane przez aplikację webową, należy zaopatrzyć się we własne dane. 
+
+W panelu znajdującym się po lewej stronie można zaobserwować legendę kolorów oraz mechanizm sterowania widocznością maski i modelu w obszarze obserwacji. 
+Z założenia, model jest warstwą wierzchnią, stąd przy ustawieniu 100% widoczności na obu warstwach (masce i modelu), będzie widoczna grafika predykcji modelu.
+
 ## Grafiki
-### projekt interfejsu
+### Projekt interfejsu
 Poniżej znajduje się wstępna grafika przedstawiająca planowany wygląd interfejsu użytkownika:
 
 ![SmartSelect_20250412_155407_Samsung Notes](https://github.com/user-attachments/assets/9964d4d5-d745-4f30-aa99-067b51d389db)
+
+### Wykonanie
+Poniżej znajduje się grafika przedstawiająca wygląd interfejsu użytkownika zaraz po uruchomieniu strony:
+
+![image](https://github.com/user-attachments/assets/a0e6cce3-3f46-4797-96ae-ce6a84712c23)
+
+
+Poniżej znajduje się grafika przedstawiająca wygląd interfejsu użytkownika po dodaniu plików w miejsca przeznaczone:
+
+![image](https://github.com/user-attachments/assets/e933cd91-09a4-45f0-b34a-74c0b7f1c3c3)
 
 ## Status projektu
 
