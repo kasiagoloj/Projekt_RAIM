@@ -10,21 +10,24 @@ function App() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [observationScale, setObservationScale] = useState(1.0);
   const baseObservationSize = { width: 1100, height: 700 };
+  const [maskOpacity, setMaskOpacity] = useState(0.6);
+
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/masks')
-      .then(res => res.json())
-      .then(data => {
-        const imgs = data.images.map(img => ({
-          id: img.id,
-          file: { name: img.file_name },
-          mask: null,
-        }));
-        setFrames(imgs);
-        setCurrentFrameIndex(0);
-      })
-      .catch(err => console.error("Błąd przy pobieraniu obrazów:", err));
-  },);
+  fetch('/frames')
+    .then(res => res.json())
+    .then(data => {
+      const imgs = data.map((img, index) => ({
+        id: index,
+        file: { name: img.file_name },
+        preview: img.preview,
+        mask: img.mask
+      }));
+      setFrames(imgs);
+      setCurrentFrameIndex(0);
+    })
+    .catch(err => console.error("Błąd przy pobieraniu ramek:", err));
+}, []);
 
   const handleMaskFileLoad = (file) => {
     const reader = new FileReader();
@@ -67,8 +70,9 @@ function App() {
         break;
       }
       case 'mask':
-        setMaskFile(file);
-        handleMaskFileLoad(file);
+        const files = Array.from(e.target.files || []);
+        setMaskFile(files[0]); // tylko do pokazania nazwy, opcjonalne
+        handleMultipleMaskPNGs(files);
         break;
       case 'model':
         setModelFile(file);
@@ -92,6 +96,34 @@ function App() {
   const goToNext = () => {
     setCurrentFrameIndex(prev => Math.min(prev + 1, frames.length - 1));
   };
+
+  const handleMultipleMaskPNGs = (files) => {
+  const fileMap = new Map();
+
+  files.forEach(file => {
+    const nameWithoutExtension = file.name.replace(/\.[^/.]+$/, "");
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      fileMap.set(nameWithoutExtension, event.target.result);
+
+      // Sprawdź czy wszystkie pliki zostały załadowane
+      if (fileMap.size === files.length) {
+        setFrames(prevFrames =>
+          prevFrames.map(frame => {
+            const frameNameWithoutExt = frame.file.name.replace(/\.[^/.]+$/, "");
+            const maskDataUrl = fileMap.get(frameNameWithoutExt);
+            return {
+              ...frame,
+              mask: maskDataUrl || null,
+            };
+          })
+        );
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+};
+
 
   return (
     <div className="app-wrapper">
@@ -127,7 +159,15 @@ function App() {
               />
               <span>{Math.round(observationScale * 100)}%</span>
               <label>Widoczność maski</label>
-              <input type="range" />
+              <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={maskOpacity}
+                  onChange={(e) => setMaskOpacity(parseFloat(e.target.value))}
+                />
+                <span>{Math.round(maskOpacity * 100)}%</span>
               <label>Widoczność modelu</label>
               <input type="range" />
             </div>
@@ -184,14 +224,30 @@ function App() {
             onDrop={(e) => handleDrop(e, 'mask')}
             onClick={() => document.getElementById('fileMask').click()}
           >
-            {maskFile ? (
-              <p>Plik: <strong>{maskFile.name}</strong></p>
-            ) : (
-              <p>Maska<br />(kliknij lub upuść plik)</p>
-            )}
+            {frames[currentFrameIndex]?.mask ? (
+                <img
+                  src={frames[currentFrameIndex].mask}
+                  alt={`Maska dla ${frames[currentFrameIndex].file.name}`}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '150px',
+                    objectFit: 'contain',
+                    marginTop: '0.5rem',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    display: 'block',
+                  }}
+                />
+             ) : maskFile ? (
+                <p>Plik: <strong>{maskFile.name}</strong></p>
+              ) : (
+                <p>Maska<br />(kliknij lub upuść plik)</p>
+              )}
             <input
               id="fileMask"
               type="file"
+              multiple
+              accept="image/png"
               style={{ display: 'none' }}
               onChange={(e) => handleFile(e, 'mask')}
             />
@@ -226,26 +282,17 @@ function App() {
         >
           {frames.length > 0 ? (
             <>
-            console.log("maskData keys:", Object.keys(maskData));
-        console.log("Current frame file name:", frames[currentFrameIndex]?.file.name);
               <img
                 src={frames[currentFrameIndex]?.preview}
                 alt={`Klatka ${currentFrameIndex + 1}`}
-                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', position: 'relative', zIndex: 1 }}
+                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', position: 'relative', zIndex: 1 }}
               />
               {frames[currentFrameIndex]?.mask ? (
                 <img
                   src={frames[currentFrameIndex].mask}
                   alt="Maska"
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    opacity: 0.6,
-                    pointerEvents: 'none',
-                    zIndex: 2,
+                  style={{ maxWidth: '96%', maxHeight: '96%', position: 'absolute', opacity: maskOpacity, objectFit:'contain',
+                  pointerEvents: 'none',zIndex: 2,
                   }}
                 />
               ) : (
