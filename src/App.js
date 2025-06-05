@@ -11,7 +11,33 @@ function App() {
   const [observationScale, setObservationScale] = useState(1.0);
   const baseObservationSize = { width: 1100, height: 700 };
   const [maskOpacity, setMaskOpacity] = useState(0.6);
+  const categoryColors = {
+      1: [0.40, 0.89, 0.40],   // zielony
+      2: [0.38, 0.54, 0.98],   // błękitny
+      3: [0.98, 0.94, 0.40],   // żółty
+      4: [1.00, 0.70, 0.43],   // pomarańczowy
+      5: [0.95, 0.45, 0.98],   // różowy
+      6: [0.45, 0.38, 0.98],   // fioletowy
+      7: [1.00, 0.32, 0.32],   // czerwony
+      8: [0.07, 0.00, 1.00],   // granatowy
+      9: [0.40, 0.70, 0.70],   // turkusowy
+      10: [0.90, 0.60, 0.30],  // pomarańczowy inny
+      11: [1.00, 0.00, 1.00],  // różowy intensywny
+    };
 
+    const classLabels = {
+      1: 'zęby',
+      2: 'wiertło',
+      3: 'język',
+      4: 'x',
+      5: 'podniebienie',
+      6: 'polik',
+      7: 'lignina/gaza',
+      8: 'zewnętrze',
+      9: 'x',
+      10: 'x',
+      11: 'próchnica / uszkodzenie zęba'
+    };
 
   useEffect(() => {
   fetch('/frames')
@@ -142,8 +168,38 @@ function App() {
           </button>
           <div className="visibility-panel">
             <label className="legend-label">Legenda kolorów</label>
-            <div className="legend-box">
-              {/* Tu będzie legenda */}
+            <div
+              className="legend-box"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                textAlign: 'left',
+                gap: '5px',
+                height: '200px',
+                overflowY: 'auto',
+                padding: '10px',
+                border: '5px solid #ccc',
+                borderRadius: '10px',
+                backgroundColor: '#f9f9f9',
+                paddingTop: '60px',
+              }}
+            >
+              {Object.entries(categoryColors).map(([id, rgb]) => {
+                const [r, g, b] = rgb.map(v => Math.round(v * 255));
+                const color = `rgb(${r}, ${g}, ${b})`;
+                return (
+                  <div key={id} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{
+                      width: '16px',
+                      height: '16px',
+                      backgroundColor: color,
+                      border: '1px solid #ccc'
+                    }}></div>
+                    <span>{classLabels[id]}</span>
+                  </div>
+                );
+              })}
             </div>
 
             <h3>Sterowanie widocznością elementów</h3>
