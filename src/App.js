@@ -206,7 +206,7 @@ const handleMultipleModelPNGs = (files) => {
             ◀
           </button>
           <div className="visibility-panel">
-            <label className="legend-label">Legenda kolorów</label>
+            <label className="legend-label">Legenda kolorów na masce</label>
             <div
               className="legend-box"
               style={{
@@ -221,7 +221,7 @@ const handleMultipleModelPNGs = (files) => {
                 border: '5px solid #ccc',
                 borderRadius: '10px',
                 backgroundColor: '#f9f9f9',
-                paddingTop: '60px',
+                paddingTop: '50px',
               }}
             >
               {Object.entries(categoryColors).map(([id, rgb]) => {
