@@ -34,13 +34,13 @@ function App() {
       1: 'zęby',
       2: 'wiertło',
       3: 'język',
-      4: 'x',
-      5: 'podniebienie',
-      6: 'polik',
+      4: 'lustro',
+      5: 'tkanka miękka',
+      6: 'usta',
       7: 'lignina/gaza',
-      8: 'zewnętrze',
-      9: 'x',
-      10: 'x',
+      8: 'tło',
+      9: 'narzędzia',
+      10: 'odbicie lustrzane',
       11: 'próchnica / uszkodzenie zęba'
     };
 
