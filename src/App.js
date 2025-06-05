@@ -2,15 +2,20 @@ import './App.css';
 import React, { useState, useEffect, useRef } from 'react';
 
 function App() {
+  // stałe
   const [frames, setFrames] = useState([]);
   const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
   const [maskFile, setMaskFile] = useState(null);
   const [modelFile, setModelFile] = useState(null);
   const [maskData, setMaskData] = useState(null);
+  const [modelData, setModelData] = useState(null);
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [observationScale, setObservationScale] = useState(1.0);
   const baseObservationSize = { width: 1100, height: 700 };
   const [maskOpacity, setMaskOpacity] = useState(0.6);
+  const [modelOpacity, setModelOpacity] = useState(0.6);
+
+  // kolory w legendzie
   const categoryColors = {
       1: [0.40, 0.89, 0.40],   // zielony
       2: [0.38, 0.54, 0.98],   // błękitny
@@ -39,6 +44,7 @@ function App() {
       11: 'próchnica / uszkodzenie zęba'
     };
 
+    // przyjmowanie pliku json
   useEffect(() => {
   fetch('/frames')
     .then(res => res.json())
@@ -79,6 +85,7 @@ function App() {
     reader.readAsText(file);
   };
 
+  // przyjmowane pliki
   const handleFile = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -90,19 +97,24 @@ function App() {
           file,
           preview: URL.createObjectURL(file),
           mask: null,
+          model: null,
         }));
         setFrames(previews);
         setCurrentFrameIndex(0);
         break;
       }
-      case 'mask':
+      case 'mask': {
         const files = Array.from(e.target.files || []);
         setMaskFile(files[0]); // tylko do pokazania nazwy, opcjonalne
         handleMultipleMaskPNGs(files);
         break;
-      case 'model':
-        setModelFile(file);
+      }
+      case 'model': {
+        const files = Array.from(e.target.files || []);
+        setModelFile(files[0]);
+        handleMultipleModelPNGs(files);
         break;
+      }
       default:
         break;
     }
@@ -141,6 +153,33 @@ function App() {
             return {
               ...frame,
               mask: maskDataUrl || null,
+            };
+          })
+        );
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+};
+
+const handleMultipleModelPNGs = (files) => {
+  const fileMap = new Map();
+
+  files.forEach(file => {
+    const nameWithoutExtension = file.name.replace(/\.[^/.]+$/, "");
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      fileMap.set(nameWithoutExtension, event.target.result);
+
+      // Sprawdź czy wszystkie pliki zostały załadowane
+      if (fileMap.size === files.length) {
+        setFrames(prevFrames =>
+          prevFrames.map(frame => {
+            const frameNameWithoutExt = frame.file.name.replace(/\.[^/.]+$/, "");
+            const modelDataUrl = fileMap.get(frameNameWithoutExt) || Array.from(fileMap.values())[0];
+            return {
+              ...frame,
+              model: modelDataUrl || null,
             };
           })
         );
@@ -225,7 +264,15 @@ function App() {
                 />
                 <span>{Math.round(maskOpacity * 100)}%</span>
               <label>Widoczność modelu</label>
-              <input type="range" />
+              <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={modelOpacity}
+                  onChange={(e) => setModelOpacity(parseFloat(e.target.value))}
+                />
+                <span>{Math.round(modelOpacity * 100)}%</span>
             </div>
           </div>
         </aside>
@@ -250,9 +297,9 @@ function App() {
             onDrop={(e) => handleDrop(e, 'input')}
             onClick={() => document.getElementById('fileInput').click()}
           >
-            {frames.length > 0 ? (
+            {frames.length > 0 && frames[currentFrameIndex]?.preview ? (
               <img
-                src={frames[currentFrameIndex]?.preview}
+                src={frames[currentFrameIndex].preview}
                 alt="Podgląd"
                 title={frames[currentFrameIndex]?.file.name}
                 style={{ maxWidth: '100%', maxHeight: '150px', marginTop: '0.5rem' }}
@@ -275,30 +322,20 @@ function App() {
             onDrop={(e) => handleDrop(e, 'mask')}
             onClick={() => document.getElementById('fileMask').click()}
           >
-            {frames[currentFrameIndex]?.mask ? (
-                <img
-                  src={frames[currentFrameIndex].mask}
-                  alt={`Maska dla ${frames[currentFrameIndex].file.name}`}
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '150px',
-                    objectFit: 'contain',
-                    marginTop: '0.5rem',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    display: 'block',
-                  }}
-                />
-             ) : maskFile ? (
-                <p>Plik: <strong>{maskFile.name}</strong></p>
-              ) : (
-                <p>Maska<br />(kliknij lub upuść plik)</p>
-              )}
+            {frames.length > 0 && frames[currentFrameIndex]?.mask ? (
+              <img
+                src={frames[currentFrameIndex].mask}
+                alt="Podgląd"
+                title={frames[currentFrameIndex]?.file.name}
+                style={{ maxWidth: '100%', maxHeight: '150px', marginTop: '0.5rem' }}
+              />
+            ) : (
+              <p>Maski<br />(kliknij lub upuść plik)</p>
+            )}
             <input
               id="fileMask"
               type="file"
               multiple
-              accept="image/png"
               style={{ display: 'none' }}
               onChange={(e) => handleFile(e, 'mask')}
             />
@@ -310,14 +347,20 @@ function App() {
             onDrop={(e) => handleDrop(e, 'model')}
             onClick={() => document.getElementById('fileModel').click()}
           >
-            {modelFile ? (
-              <p>Plik: <strong>{modelFile.name}</strong></p>
+            {frames.length > 0 && frames[currentFrameIndex]?.model ? (
+              <img
+                src={frames[currentFrameIndex].model}
+                alt="Podgląd"
+                title={frames[currentFrameIndex]?.file.name}
+                style={{ maxWidth: '100%', maxHeight: '150px', marginTop: '0.5rem' }}
+              />
             ) : (
               <p>Model<br />(kliknij lub upuść plik)</p>
             )}
             <input
               id="fileModel"
               type="file"
+              multiple
               style={{ display: 'none' }}
               onChange={(e) => handleFile(e, 'model')}
             />
@@ -325,37 +368,43 @@ function App() {
         </div>
 
         <main className="observation-area"
-          style={{
-            width: `${baseObservationSize.width * observationScale}px`,
-            height: `${baseObservationSize.height * observationScale}px`,
-            position: 'relative',
-          }}
-        >
-          {frames.length > 0 ? (
-            <>
-              <img
-                src={frames[currentFrameIndex]?.preview}
-                alt={`Klatka ${currentFrameIndex + 1}`}
-                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', position: 'relative', zIndex: 1 }}
-              />
-              {frames[currentFrameIndex]?.mask ? (
-                <img
-                  src={frames[currentFrameIndex].mask}
-                  alt="Maska"
-                  style={{ maxWidth: '96%', maxHeight: '96%', position: 'absolute', opacity: maskOpacity, objectFit:'contain',
-                  pointerEvents: 'none',zIndex: 2,
-                  }}
-                />
-              ) : (
-                <p style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
-                  Maska dla tego pliku: NIE
-                </p>
-              )}
-            </>
-          ) : (
-            <p>Brak załadowanego zdjęcia</p>
-          )}
-        </main>
+  style={{
+    width: `${baseObservationSize.width * observationScale}px`,
+    height: `${baseObservationSize.height * observationScale}px`,
+    position: 'relative',
+  }}
+>
+  {frames.length > 0 ? (
+    <>
+      <img
+        src={frames[currentFrameIndex]?.preview}
+        alt={`Klatka ${currentFrameIndex + 1}`}
+        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', position: 'relative', zIndex: 1 }}
+      />
+      
+      {frames[currentFrameIndex]?.mask && (
+        <img
+          src={frames[currentFrameIndex].mask}
+          alt="Maska"
+          style={{ maxWidth: '96%', maxHeight: '96%', position: 'absolute', opacity: maskOpacity, objectFit:'contain',
+          pointerEvents: 'none', zIndex: 2 }}
+        />
+      )}
+
+      {frames[currentFrameIndex]?.model && (
+        <img
+          src={frames[currentFrameIndex].model}
+          alt="Model"
+          style={{ maxWidth: '96%', maxHeight: '96%', position: 'absolute', opacity: modelOpacity, objectFit:'contain',
+          pointerEvents: 'none', zIndex: 3 }}
+        />
+      )}
+    </>
+  ) : (
+    <p>Brak załadowanego zdjęcia</p>
+  )}
+</main>
+
 
         <div className="frames">
           <button
